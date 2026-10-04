@@ -1,0 +1,5 @@
+Tool: built-in imagegen
+Final project asset: app/dashboard/static/catgirl.png
+Background: transparent
+
+Use case: stylized-concept. Asset type: original transparent mascot illustration for a playful meme-themed AI security dashboard and alert notifications. Primary request: a clearly adult anime catgirl cyber-security operator, waist-up portrait, joyful mischievous smug expression, black cat ears with pink inner fur, short fluffy white hair with a pink streak, bright mint-green eyes, oversized dark charcoal hoodie with a simple tiny shield patch, fully clothed and nonsexual. She holds a small pink squeaky toy bonk hammer in one hand and makes a peace sign with the other. Style: polished expressive anime sticker art, bold charcoal outlines, vivid hot pink and mint accents, comic cel shading, playful internet meme energy. Composition: single character centered, clean coherent silhouette, all ears, hands and hammer fully within the frame; transparent background, no ground shadow, no typography or lettering, no watermark. Keep face legible at small notification sizes. Deliver a high-quality square transparent PNG for real web use.

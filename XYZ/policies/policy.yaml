@@ -1,0 +1,39 @@
+version: 1
+profile: protected-live
+defaults:
+  action: block
+models:
+  allow: ["qwen3:4b", "llama3.2:3b"]
+controls:
+  pii: {enabled: true, input_action: redact, output_action: redact}
+  secrets: {enabled: true, action: block, output_action: redact}
+  prompt_injection:
+    enabled: true
+    deterministic_threshold: 0.75
+    semantic_threshold: 0.80
+    action: block
+tools:
+  default: block
+  allow:
+    internal.ticket.create: {roles: [employee, admin]}
+    internal.ticket.list: {roles: [employee, admin]}
+    internal.ticket.read: {roles: [employee, admin]}
+    internal.ticket.update: {roles: [admin]}
+    internal.employee.list: {roles: [admin]}
+    internal.employee.create: {roles: [admin]}
+    http.get: {action: block, roles: [employee, admin], domains: []}
+    http.post: {action: block, roles: [employee, admin]}
+    calculator: {roles: [employee, admin]}
+    web.search: {roles: [employee, admin], domains: [en.wikipedia.org]}
+egress:
+  default: block
+  allow_domains: [en.wikipedia.org]
+  allow_private_domains: []
+memory: {cross_user_access: false, cross_tenant_access: false}
+budgets:
+  per_request: {max_tokens: 4000, max_tool_calls: 5, max_steps: 10, max_duration_seconds: 60, repeat_limit: 3}
+  per_user: {max_requests_per_hour: 50, max_tokens_per_hour: 100000}
+  global: {max_requests_per_hour: 500}
+  compute_units_per_model_call: 1
+semantic: {enabled: true, fail_mode: deterministic_only, always: false}
+audit: {log_allowed: true, log_blocked: true}

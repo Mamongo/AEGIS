@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AEGIS :3 — Catgirl Guard Squad</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/meme.css?v=2">
+</head>
+<body>
+<main>
+  <header class="meme-hero">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span> CATGIRL GUARD SQUAD / LOCAL OPS</div>
+      <h1><span>AEGIS <em>:3</em></span></h1>
+      <p class="hero-tagline">Your agent has ideas.<br>Your firewall has a <strong>bonk hammer.</strong></p>
+      <div class="hero-chips"><span>REAL TOOLS. REAL CONSEQUENCES.</span><span class="chip-mint">ZERO TRUST / MAXIMUM NYA</span></div>
+      <div class="hero-controls"><div id="posture" class="posture">NOT CONNECTED</div><button id="catgirl-mood" class="subtle alert-toggle" type="button" aria-pressed="true">Catgirl alerts: ON</button></div>
+    </div>
+    <div id="mascot-state" class="mascot-card">
+      <span class="mascot-kicker">HEAD OF VIBE SECURITY</span>
+      <span class="meme-sticker sticker-top" aria-hidden="true">SUSPICIOUS?<br>BONK.</span>
+      <img class="hero-catgirl" src="/static/catgirl.png" alt="Catgirl security mascot with a pink bonk hammer" width="400" height="400" fetchpriority="high">
+      <div class="mascot-caption"><span class="mascot-name">NYA-LL / GUARD ONLINE</span><span id="mascot-status">Awaiting your next move, nya.</span></div>
+      <span class="meme-sticker sticker-bottom" aria-hidden="true">touch grass.<br>keep logs.</span>
+    </div>
+  </header>
+  <div class="statusbar"><span id="provider">Connect to check the local model</span><span id="versions">Policy and signatures</span><span id="identity">No authenticated user</span></div>
+  <div id="error" role="alert" class="error" hidden></div>
+
+  <section class="panel">
+    <div class="section-title"><div><div class="eyebrow">[ 01 / JOIN THE PARTY ]</div><h2>Credentials check, bestie.</h2></div><button id="disconnect" class="subtle" type="button">Disconnect</button></div>
+    <form id="credentials" class="credential-form" autocomplete="off">
+      <label>User API key<input id="api-key" type="password" autocomplete="off" placeholder="API_KEYS_JSON token from .env"></label>
+      <label>Operator token<input id="admin-token" type="password" autocomplete="off" placeholder="ADMIN_TOKEN from .env"></label>
+      <button type="submit">Connect →</button>
+    </form>
+    <p class="hint">Credentials stay in this page's memory until disconnect or reload. The API key identifies the user; the operator token opens audit and policy controls.</p>
+    <div class="session-settings"><label>Agent<select id="agent"><option value="support-agent">support-agent</option></select></label><span id="connection" role="status">Enter credentials from your local .env file.</span></div>
+  </section>
+
+  <section class="panel search-panel" aria-labelledby="search-heading">
+    <div class="section-title"><div><div class="eyebrow">[ QUICK ANSWER / NO PAID API ]</div><h2 id="search-heading">Search the web, skip the lore dump.</h2></div><span class="mini-sticker sticker-yellow">LESS SCROLL / MORE BRAIN CELL</span></div>
+    <form id="search-form" class="search-form" autocomplete="off">
+      <label for="search-query">What are we looking up?<input id="search-query" type="search" maxlength="300" required placeholder="Ada Lovelace, black holes, or your next rabbit hole" autocomplete="off" spellcheck="false" aria-describedby="search-hint"></label>
+      <div class="actions"><button id="search-quick" type="submit" name="mode" value="quick">Quick answer :3</button><button id="search-google" type="submit" name="mode" value="google" class="subtle">Search Google ↗</button></div>
+    </form>
+    <p id="search-hint" class="hint">Quick answers from Wikipedia. Full web results open in Google. Connect with a user API key first; Google opens from a link after the gateway checks your query.</p>
+    <div id="search-results" class="search-results" aria-busy="false">
+      <p id="search-status" class="search-status" role="status">One query. A quick answer. No paid API key.</p>
+      <div id="search-answer-card" class="search-answer-card" hidden><div id="search-meta" class="search-meta"></div><h3 id="search-title"></h3><p id="search-answer" class="search-answer"></p></div>
+      <ul id="search-sources" class="search-sources" aria-label="Answer sources" hidden></ul>
+      <a id="search-google-link" class="search-google-link" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" hidden>Open Google results ↗</a>
+    </div>
+  </section>
+
+  <div class="columns workspace">
+    <section class="panel">
+      <div class="section-title"><div><div class="eyebrow">[ 02 / LET IT COOK ]</div><h2>Chat with your agent</h2></div><span class="mini-sticker">Ollama required</span></div>
+      <div id="chat-history" class="chat-history" aria-live="polite"><p>Ask about a saved ticket or give the agent a task. Every proposed tool call passes through the gateway.</p></div>
+      <form id="chat-form"><label>Message<textarea id="chat-input" rows="3" maxlength="32000" required placeholder="List my open tickets. We have a situation, nya."></textarea></label><div class="actions"><button id="chat-send" type="submit">Send message →</button><span class="muted">Fresh request, fresh brain cell. Include the context your agent needs.</span></div></form>
+    </section>
+    <section class="panel">
+      <div class="section-title"><div><div class="eyebrow">[ 03 / NO YOLO EXECUTION ]</div><h2>Use a registered tool</h2></div><span class="mini-sticker sticker-yellow">POLICY FIRST</span></div>
+      <form id="tool-form"><label>Tool<select id="tool-name"><option value="">Connect with an API key</option></select></label><label>Arguments (JSON object)<textarea id="tool-arguments" class="code" rows="6" required>{}</textarea></label><div class="actions"><button type="submit" name="operation" value="execute">Execute tool</button><button type="submit" name="operation" value="evaluate" class="subtle">Evaluate only</button></div></form>
+      <details><summary>Registered argument schema</summary><pre id="tool-schema">Connect to load schemas.</pre></details>
+      <p class="hint">Execute runs an authorized adapter and can change stored records or send an HTTP request. Evaluate only checks the proposal. HTTP access requires explicit policy grants.</p>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="section-title"><div><div class="eyebrow">[ 04 / THE LORE IS PERSISTENT ]</div><h2>Tickets, aka side quests.</h2></div><button id="ticket-refresh" type="button" class="subtle">Refresh tickets ↻</button></div>
+    <div class="columns ticket-workspace">
+      <div><form id="ticket-create"><h3>Create a ticket</h3><label>Summary<input id="ticket-summary" required maxlength="500" placeholder="Describe the issue"></label><label>Description<textarea id="ticket-description" rows="3" maxlength="10000" placeholder="Add details"></textarea></label><button type="submit">Create ticket</button></form><p class="hint">Records belong to your authenticated tenant. Stored content passes through input and output controls.</p></div>
+      <div><form id="ticket-open"><h3>Read a ticket</h3><label>Ticket ID<input id="ticket-id" inputmode="numeric" pattern="[0-9]{1,8}" maxlength="8" required placeholder="ID of a saved ticket"></label><button type="submit" class="subtle">Read ticket</button></form><div id="ticket-detail" class="ticket-detail"><p>Select a saved ticket to see its details.</p></div><form id="ticket-update" hidden><label>Status<select id="ticket-status"><option value="open">Open</option><option value="in_progress">In progress</option><option value="closed">Closed</option></select></label><button id="ticket-save" type="submit">Save status</button><p class="hint">The policy must grant this user's role ticket updates.</p></form></div>
+    </div>
+    <div class="table-scroll"><table><thead><tr><th>ID</th><th>Summary</th><th>Status</th><th>Updated</th><th></th></tr></thead><tbody id="tickets"><tr><td colspan="5" class="muted">Connect with an API key and refresh to load your tenant's tickets.</td></tr></tbody></table></div>
+  </section>
+
+  <section class="panel decision-panel"><div class="section-title"><div><div class="eyebrow">[ 05 / THE VIBE CHECK ]</div><h2>Latest gateway decision</h2></div><span class="muted">The receipts are below.</span></div><div id="result" class="result" aria-live="polite"><p>Send a message or submit a tool proposal. The guard squad is watching.</p></div><p class="hint">Execution and output release are separate checks. A blocked result can follow an action that already ran.</p></section>
+
+  <section id="operations" class="operator-area">
+    <div class="section-title"><div><div class="eyebrow">[ 06 / RECEIPTS OR IT DIDN'T HAPPEN ]</div><h2>Operator overview</h2></div><span id="operator-status" class="muted">Connect with an operator token to load audit, quotas and policy.</span></div>
+    <section id="cards" class="cards"></section>
+    <div class="columns"><section class="panel"><div class="section-title"><h2>Blocks by control</h2></div><div id="threats"><p>No operator data loaded.</p></div></section><section class="panel"><div class="section-title"><h2>Budget / resource usage</h2><button id="reset" type="button" class="subtle" disabled>Reset quota counters</button></div><div id="budget"><p>No operator data loaded.</p></div></section></div>
+    <section class="panel"><div class="section-title"><h2>Recent security events</h2><select id="filter" aria-label="Filter events by decision"><option value="">All decisions</option><option>BLOCK</option><option>REQUIRE_APPROVAL</option><option>REDACT</option><option>WARN</option><option>ALLOW</option></select></div><div class="table-scroll"><table><thead><tr><th>Time</th><th>Decision</th><th>Control / rule</th><th>Reason</th><th>User</th><th>Policy</th></tr></thead><tbody id="events"><tr><td colspan="6" class="muted">Connect with an operator token to load events.</td></tr></tbody></table></div></section>
+    <div class="columns"><section class="panel"><div class="section-title"><h2>Current policy</h2><button id="reload" type="button" class="subtle" disabled>Reload policy</button></div><div id="policy-summary"></div><details><summary>Validated configuration</summary><pre id="policy">No operator data loaded.</pre></details></section><section class="panel"><div class="section-title"><h2>Tool permissions</h2><button id="feed-reload" type="button" class="subtle" disabled>Reload signatures</button></div><div id="permissions"><p>No operator data loaded.</p></div></section></div>
+  </section>
+  <footer><span>Made of policies, SQLite, and questionable amounts of catgirl energy.</span><a href="/docs">Read the actual docs ↗</a></footer>
+</main>
+<aside id="catgirl-alert" class="catgirl-alert" aria-labelledby="catgirl-alert-title" hidden>
+  <div class="alert-portrait"><img id="catgirl-alert-image" src="/static/catgirl.png" alt="" width="120" height="120"><span aria-hidden="true">:3</span></div>
+  <div class="alert-copy"><small id="catgirl-alert-label">GUARD SQUAD ALERT</small><h2 id="catgirl-alert-title">The vibe check is in.</h2><p id="catgirl-alert-message"></p><small id="catgirl-alert-detail"></small></div>
+  <button id="catgirl-alert-dismiss" class="alert-dismiss" type="button" aria-label="Dismiss catgirl alert">×</button>
+</aside>
+<div id="catgirl-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+<script src="/static/app.js?v=3" defer></script>
+</body>
+</html>

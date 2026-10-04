@@ -1,0 +1,9 @@
+version: 1
+signatures:
+  - {id: ATTACK-PROMPT-001, category: prompt_injection, pattern: 'ignore (?:all |previous )?instructions', severity: high, action: block}
+  - {id: ATTACK-RCE-001, category: dangerous_command, pattern: 'curl[^\n|]*\|\s*(?:ba)?sh', severity: critical, action: block}
+  - {id: ATTACK-DESTRUCTIVE-001, category: destructive_shell, pattern: '(?:rm\s+-rf\s+/|format\s+c:|Remove-Item.+-Recurse)', severity: critical, action: block}
+  - {id: ATTACK-REVERSE-001, category: reverse_shell, pattern: '(?:/dev/tcp/|nc\s+.+\s+-e\s+|bash\s+-i)', severity: critical, action: block}
+  - {id: ATTACK-DESERIALIZATION-001, category: unsafe_deserialization, pattern: 'pickle\.loads|torch\.load\(.+weights_only\s*=\s*False', severity: critical, action: block}
+  - {id: ATTACK-SUPPLY-001, category: model_supply_chain, pattern: 'trust_remote_code\s*=\s*True|wget[^\n|]*\|\s*(?:ba)?sh', severity: high, action: block}
+  - {id: ATTACK-EXFIL-001, category: credential_exfiltration, pattern: '(?:send|upload|transmit).{0,80}(?:passwords?|secrets?|credentials?).{0,100}https?://', severity: critical, action: block}
